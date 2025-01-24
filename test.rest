@@ -1,0 +1,39 @@
+### Test Index
+GET http://127.0.0.1:8000/
+
+
+### Test Create a ToDo
+POST http://localhost:8000/todos
+Content-Type: application/json
+
+{
+  "title": "Test ToDo 3",
+  "description": "This is a test ToDo 3",
+  "completed": false
+}
+
+
+### Test Get all ToDos
+GET http://localhost:8000/todos
+
+
+### Test Get a single ToDo by ID
+GET http://localhost:8000/todos/1
+
+
+### Test Get ToDo that does not exist
+GET http://localhost:8000/todos/100
+
+
+### Test Delete a ToDo
+DELETE http://localhost:8000/todos/4
+
+### Test Update a ToDo
+PUT http://localhost:8000/todos/1
+Content-Type: application/json
+
+{
+  "title": "Test ToDo 1 Updated to be completed",
+  "description": "This is a test ToDo 1 Updated",
+  "completed": true
+}
