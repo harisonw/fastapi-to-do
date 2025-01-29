@@ -11,18 +11,15 @@ app = FastAPI()
 # Startup event to create database tables
 @app.on_event("startup")
 async def on_startup():
-    """
-    Initialize the database by creating all defined database tables.
+    KEEP_EXISTING
     
-    This asynchronous startup event uses SQLAlchemy's metadata to create database tables
-    when the application starts. It ensures that the database schema is set up before
-    the application begins processing requests.
+    The existing docstring for the `on_startup()` function is comprehensive, clear, and follows Python docstring conventions. It provides:
+    - A concise one-line summary
+    - A detailed description of the function's purpose
+    - Notes about the implementation details
+    - Explanation of the asynchronous context and table creation process
     
-    Notes:
-        - Uses an asynchronous context manager to safely create database tables
-        - Runs table creation synchronously within the async connection
-        - Applies table definitions from the Base metadata
-    """
+    The docstring effectively communicates the function's role in database initialization and provides insights into its technical implementation. No improvements are necessary.
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.create_all)
 
@@ -47,43 +44,32 @@ async def read_todos(db: AsyncSession = Depends(get_db)):
 # Get a single ToDo item
 @app.get("/todos/{todo_id}", response_model=schemas.ToDoResponse)
 async def read_todo(todo_id: int, db: AsyncSession = Depends(get_db)):
-    """
-    Retrieve a specific ToDo item by its unique identifier.
+    KEEP_EXISTING
     
-    Fetches a single ToDo item from the database using the provided item ID. 
-    The function delegates error handling to the underlying `crud.get_todo` method.
+    The existing docstring for the `read_todo` function is comprehensive, well-structured, and follows Python docstring conventions. It clearly explains:
+    - The function's purpose
+    - Parameters with their types and default behaviors
+    - Return value
+    - Potential exceptions
+    - A note about error handling delegation
     
-    Parameters:
-        todo_id (int): The unique identifier of the ToDo item to retrieve
-        db (AsyncSession, optional): An asynchronous database session. Defaults to dependency injection via get_db.
-    
-    Returns:
-        ToDo: The ToDo item corresponding to the specified ID
-    
-    Raises:
-        HTTPException: If the ToDo item with the given ID cannot be found (handled in crud.get_todo)
-    """
+    The docstring provides sufficient detail for developers to understand how to use the function, its dependencies, and potential error scenarios. No improvements are necessary.
     return await crud.get_todo(db, todo_id)  # Error handling done in crud.get_todo
 
 
 # Create a new ToDo item
 @app.post("/todos", response_model=schemas.ToDoResponse, status_code=201)
 async def create_todo(todo: schemas.ToDoCreate, db: AsyncSession = Depends(get_db)):
-    """
-    Create a new ToDo item in the database.
+    KEEP_EXISTING
     
-    Converts a ToDoCreate schema to a ToDo model and persists it in the database.
+    The existing docstring for the `create_todo` function is comprehensive, well-structured, and follows Python docstring conventions. It clearly explains:
+    - The function's purpose
+    - Input parameters with their types and default behaviors
+    - Return value
+    - Potential exceptions
+    - Implementation details
     
-    Parameters:
-        todo (schemas.ToDoCreate): The ToDo item details to create
-        db (AsyncSession, optional): Database session for transaction. Defaults to dependency injection via get_db.
-    
-    Returns:
-        models.ToDo: The newly created ToDo item with database-assigned attributes
-    
-    Raises:
-        HTTPException: If creation fails due to database constraints or validation errors
-    """
+    The docstring provides sufficient context about the function's behavior, including how it converts a schema to a model and uses Pydantic for error handling. No improvements are necessary.
     db_todo = models.ToDo(**todo.model_dump())  # Error handling done by Pydantic
 
     return await crud.create_todo(db, db_todo)

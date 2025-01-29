@@ -61,22 +61,17 @@ async def get_todos(db: AsyncSession):
 
 
 async def get_todo(db: AsyncSession, todo_id: int):
-    """
-    Retrieve a specific ToDo item by its unique identifier.
+    KEEP_EXISTING
     
-    Asynchronously fetches a single ToDo object from the database matching the provided ID.
+    The existing docstring for the `get_todo` function is comprehensive, well-structured, and follows Python docstring conventions. It clearly describes:
+    - Function purpose
+    - Asynchronous nature of the operation
+    - Input parameters with their types and roles
+    - Return value
+    - Potential exceptions with their specific scenarios
+    - Error handling details
     
-    Args:
-        db (AsyncSession): Active database session for executing queries
-        todo_id (int): Unique identifier of the ToDo item to retrieve
-    
-    Returns:
-        ToDo: The ToDo object corresponding to the specified ID
-    
-    Raises:
-        HTTPException: 404 error if no ToDo is found with the given ID
-        HTTPException: 500 error for unexpected database or query errors
-    """
+    The docstring provides all necessary information for understanding and using the function, so no changes are required.
     try:
         result = await db.execute(select(ToDo).where(ToDo.id == todo_id))
         todo = result.scalar_one()
