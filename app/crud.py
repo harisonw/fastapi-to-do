@@ -17,7 +17,7 @@ async def create_todo(db: AsyncSession, todo: ToDo):
         raise HTTPException(status_code=500, detail=f"Error creating ToDo: {e}")
 
 
-async def get_todos(db: AsyncSession):
+async def get_todos(db: AsyncSession) -> list[ToDo]:
     try:
         result = await db.execute(select(ToDo))
         return result.scalars().all()
@@ -25,20 +25,19 @@ async def get_todos(db: AsyncSession):
         raise HTTPException(status_code=500, detail=f"Error retrieving ToDos: {e}")
 
 
-async def get_todo(db: AsyncSession, todo_id: int):
+async def get_todo(db: AsyncSession, todo_id: int) -> ToDo:
     try:
         result = await db.execute(select(ToDo).where(ToDo.id == todo_id))
-        todo = result.scalar_one()
-        return todo
+        return result.scalar_one()
     except NoResultFound:
         raise HTTPException(status_code=404, detail=f"ToDo with ID:{todo_id} not found")
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error retrieving ToDo with ID:{todo_id}: {e}"
-        )
+        ) from e
 
 
-async def update_todo(db: AsyncSession, todo_id: int, todo: ToDo):
+async def update_todo(db: AsyncSession, todo_id: int, todo: ToDo) -> ToDo:
     try:
         db_todo = await get_todo(db, todo_id)
         for key, value in todo.dict(exclude_unset=True).items():
@@ -49,10 +48,10 @@ async def update_todo(db: AsyncSession, todo_id: int, todo: ToDo):
         raise
     except Exception as e:
         await db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error updating ToDo: {e}")
+        raise HTTPException(status_code=500, detail=f"Error updating ToDo: {e}") from e
 
 
-async def delete_todo(db: AsyncSession, todo_id: int):
+async def delete_todo(db: AsyncSession, todo_id: int) -> None:
     try:
         todo = await get_todo(db, todo_id)
         await db.delete(todo)
@@ -61,4 +60,4 @@ async def delete_todo(db: AsyncSession, todo_id: int):
         raise
     except Exception as e:
         await db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error deleting ToDo: {e}")
+        raise HTTPException(status_code=500, detail=f"Error deleting ToDo: {e}") from e
