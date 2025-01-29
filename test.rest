@@ -29,7 +29,7 @@ GET http://localhost:8000/todos/100
 DELETE http://localhost:8000/todos/4
 
 ### Test Update a ToDo
-PUT http://localhost:8000/todos/1
+PUT http://localhost:8000/todos/100
 Content-Type: application/json
 
 {
