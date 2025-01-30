@@ -13,11 +13,11 @@ app = FastAPI()
 async def on_startup() -> None:
     """
     Initialize the database tables during application startup.
-    
+
     This asynchronous function creates all database tables defined in the SQLAlchemy models
-    by using the database engine's connection. It ensures that the database schema is 
+    by using the database engine's connection. It ensures that the database schema is
     set up before the application begins serving requests.
-    
+
     Note:
         - Uses an asynchronous context manager to begin a database transaction
         - Runs table creation synchronously within the async context
@@ -32,12 +32,12 @@ async def on_startup() -> None:
 async def read_todos(db: AsyncSession = Depends(get_db)) -> list[schemas.ToDoResponse]:
     """
     Retrieve all ToDo items from the database.
-    
+
     Fetches a list of all ToDo items using an asynchronous database session.
-    
+
     Args:
         db (AsyncSession): An asynchronous database session dependency for database operations.
-    
+
     Returns:
         list[schemas.ToDoResponse]: A list of ToDo items, each represented as a ToDoResponse schema.
     """
@@ -51,17 +51,17 @@ async def read_todo(
 ) -> schemas.ToDoResponse:
     """
     Retrieve a specific ToDo item by its unique identifier.
-    
+
     Fetches a single ToDo item from the database matching the provided todo_id.
     Utilizes an asynchronous database session to perform the lookup.
-    
+
     Parameters:
         todo_id (int): The unique identifier of the ToDo item to retrieve
         db (AsyncSession, optional): Asynchronous database session. Defaults to dependency injection via get_db.
-    
+
     Returns:
         schemas.ToDoResponse: The ToDo item corresponding to the specified todo_id
-    
+
     Raises:
         HTTPException: If no ToDo item is found with the given todo_id (handled in crud.get_todo)
     """
@@ -75,16 +75,16 @@ async def create_todo(
 ) -> schemas.ToDoResponse:
     """
     Create a new ToDo item in the database.
-    
+
     This function takes a ToDoCreate schema, converts it to a database model, and persists it using the CRUD create method.
-    
+
     Parameters:
         todo (schemas.ToDoCreate): The ToDo item details to be created
         db (AsyncSession, optional): Asynchronous database session. Defaults to dependency injection via get_db.
-    
+
     Returns:
         schemas.ToDoResponse: The created ToDo item with database-generated fields
-    
+
     Raises:
         ValidationError: If the input data does not meet Pydantic schema requirements
     """
@@ -98,12 +98,12 @@ async def create_todo(
 async def delete_todo(todo_id: int, db: AsyncSession = Depends(get_db)) -> None:
     """
     Delete a specific ToDo item from the database.
-    
+
     Parameters:
         todo_id (int): The unique identifier of the ToDo item to be deleted
-        db (AsyncSession, optional): Asynchronous database session for performing the deletion. 
+        db (AsyncSession, optional): Asynchronous database session for performing the deletion.
             Defaults to dependency injection via get_db.
-    
+
     Raises:
         HTTPException: If the ToDo item with the specified ID cannot be found or deleted
     """
@@ -119,15 +119,15 @@ async def update_todo(
 ) -> schemas.ToDoResponse:
     """
     Update an existing ToDo item in the database.
-    
+
     Parameters:
         todo_id (int): The unique identifier of the ToDo item to be updated
         todo (schemas.ToDoUpdate): The updated information for the ToDo item
         db (AsyncSession, optional): Asynchronous database session for performing the update. Defaults to dependency injection via get_db.
-    
+
     Returns:
         schemas.ToDoResponse: The updated ToDo item with its new details
-    
+
     Raises:
         HTTPException: If the ToDo item cannot be found or updated
     """
