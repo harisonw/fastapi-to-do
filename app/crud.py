@@ -123,6 +123,7 @@ async def update_todo(db: AsyncSession, todo_id: int, todo: ToDo) -> ToDo:
         for key, value in todo.dict(exclude_unset=True).items():
             setattr(db_todo, key, value)
         await db.commit()
+        await db.refresh(db_todo)
         return db_todo
     except HTTPException:
         raise
